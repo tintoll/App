@@ -3,6 +3,9 @@ package com.example.api;
 import com.example.domain.Customer;
 import com.example.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +23,8 @@ public class CustomerRestController {
 
     //모든 고객리스트를 가져옵니다
     @RequestMapping(method = RequestMethod.GET) // (4)
-    List<Customer> getCustomers() {
-        List<Customer> customers = customerService.findAll();
+    Page<Customer> getCustomers(@PageableDefault Pageable pageable) {
+        Page<Customer> customers = customerService.findAll(pageable);
         return customers; // (5)
     }
 
