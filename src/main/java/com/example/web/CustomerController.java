@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -46,4 +47,43 @@ public class CustomerController {
         customerService.create(customer);
         return "redirect:/customers";
     }
+
+    @RequestMapping(value = "edit", method = RequestMethod.GET)
+    String editForm(@RequestParam Integer id, CustomerForm form) { //@RequestParam은 특정 요청파리미터를 매핑할수 있다
+        Customer customer = customerService.findOne(id);
+        BeanUtils.copyProperties(customer, form);
+        return "customers/edit";
+    }
+
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    String edit(@RequestParam Integer id , @Validated CustomerForm form, BindingResult result) {
+
+        if(result.hasErrors()) {
+            return editForm(id,form);
+        }
+
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(form, customer);
+        customer.setId(id);
+        customerService.update(customer);
+
+        return "redirect:/customers";
+
+    }
+
+    @RequestMapping(value = "edit", params = "goToTop") //요청 파라미터에 포함되어 있으면 목록표시화면으로 리다이렉트하는 메서드
+    String goToTop() {
+        return "redirect:/customers";
+    }
+
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    String delete(@RequestParam Integer id) {
+        customerService.delete(id);
+        return "redirect:/customers";
+
+    }
+
+
+
 }
