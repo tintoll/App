@@ -2,6 +2,7 @@ package com.example.api;
 
 import com.example.domain.Customer;
 import com.example.service.CustomerService;
+import com.example.service.LoginUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -38,8 +40,8 @@ public class CustomerRestController {
     //신규 고객 작성
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED) // API가 정상 동작했을때 보낼 HTTP응답을 지정 할 수 있다
-    ResponseEntity<Customer> postCustomer(@RequestBody Customer customer, UriComponentsBuilder uriBuilder) {
-        Customer created = customerService.create(customer);
+    ResponseEntity<Customer> postCustomer(@RequestBody Customer customer, UriComponentsBuilder uriBuilder, @AuthenticationPrincipal LoginUserDetails loginUserDetails) {
+        Customer created = customerService.create(customer,loginUserDetails.getUser());
         URI location = uriBuilder.path("api/customer/{id}")
                                  .buildAndExpand(created.getId())
                                  .toUri();
@@ -51,9 +53,9 @@ public class CustomerRestController {
 
     //고객 한명의 정보 업데이트
     @RequestMapping(value = "{id}",method = RequestMethod.PUT)
-    Customer putCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+    Customer putCustomer(@PathVariable Integer id, @RequestBody Customer customer, @AuthenticationPrincipal LoginUserDetails loginUserDetails) {
         customer.setId(id);
-        return customerService.update(customer);
+        return customerService.update(customer,loginUserDetails.getUser());
     }
     // 고객 한명의 정보 삭제
     @RequestMapping(value = "{id}" , method = RequestMethod.DELETE)

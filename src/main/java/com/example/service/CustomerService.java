@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.domain.Customer;
+import com.example.domain.User;
 import com.example.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,11 +31,13 @@ public class CustomerService {
         return customerRepository.findOne(id);
     }
 
-    public Customer create(Customer customer) {
+    public Customer create(Customer customer, User user) {
+        customer.setUser(user);
         return customerRepository.save(customer);
     }
 
-    public Customer update(Customer customer) {
+    public Customer update(Customer customer, User user) {
+        customer.setUser(user);
         return customerRepository.save(customer);
     }
 

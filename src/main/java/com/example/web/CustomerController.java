@@ -2,8 +2,10 @@ package com.example.web;
 
 import com.example.domain.Customer;
 import com.example.service.CustomerService;
+import com.example.service.LoginUserDetails;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,13 +40,13 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    String create(@Validated CustomerForm form, BindingResult result, Model model) {
+    String create(@Validated CustomerForm form, BindingResult result, Model model, @AuthenticationPrincipal LoginUserDetails userDetails) { //@AuthenticationPrincipal를 붙이면 로그인 상태에 있는 LoginUserDetails 객체를 가져올수있다
         if(result.hasErrors()) {
             return list(model);
         }
         Customer customer = new Customer();
         BeanUtils.copyProperties(form, customer);   //Bean 변환을 구현하려면 Doze나 ModelMapper를 추천
-        customerService.create(customer);
+        customerService.create(customer, userDetails.getUser());
         return "redirect:/customers";
     }
 
@@ -57,7 +59,7 @@ public class CustomerController {
 
 
     @RequestMapping(value = "edit", method = RequestMethod.POST)
-    String edit(@RequestParam Integer id , @Validated CustomerForm form, BindingResult result) {
+    String edit(@RequestParam Integer id , @Validated CustomerForm form, BindingResult result, @AuthenticationPrincipal LoginUserDetails userDetails) {
 
         if(result.hasErrors()) {
             return editForm(id,form);
@@ -66,7 +68,7 @@ public class CustomerController {
         Customer customer = new Customer();
         BeanUtils.copyProperties(form, customer);
         customer.setId(id);
-        customerService.update(customer);
+        customerService.update(customer,userDetails.getUser());
 
         return "redirect:/customers";
 

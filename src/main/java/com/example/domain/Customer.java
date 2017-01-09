@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +17,8 @@ public class Customer {
     private Integer id;
     private String firstName;
     private String lastName;
+
+    @ManyToOne(fetch = FetchType.LAZY)  // User와 Customer가 N:1의 관계를 가지도록 설정
+    @JoinColumn(nullable = true, name = "username") //외부키에 해당하는 칼럼을 지정할수 있습니다
+    private User user;
 }

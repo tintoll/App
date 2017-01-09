@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head lang="en">
     <meta charset="UTF-8"/>
     <title>고객 목록</title>
@@ -11,6 +12,10 @@
 <body>
 <div class="container">
     <h1>고객 관리 시스템</h1>
+    <p>
+        <span sec:authentication="principal.user.username">duke</span>님이 로그인상태
+       <a th:href="@{/logout}" class="btn btn-default btn-xs">로그아웃</a>
+    </p>
     <div class="col-sm-12">
         <form th:action="@{/customers/create}" th:object="${customerForm}" class="form-horizontal" method="post">
             <fieldset>
@@ -51,12 +56,16 @@
                 <th>ID</th>
                 <th>성</th>
                 <th>명</th>
+                <th>담당자</th>
+
                 <th colspan="2">편집</th>
             </tr>
             <tr th:each="customer : ${customers}">
                 <td th:text="${customer.id}">100</td>
                 <td th:text="${customer.lastName}">홍</td>
                 <td th:text="${customer.firstName}">길동</td>
+                <td th:text="${customer.user.username}">duke</td>
+
                 <td>
                     <form th:action="@{/customers/edit}" method="get">
                         <input class="btn btn-default" type="submit" name="form" value="편집"/>
