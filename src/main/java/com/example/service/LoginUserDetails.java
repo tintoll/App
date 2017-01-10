@@ -13,7 +13,7 @@ public class LoginUserDetails extends org.springframework.security.core.userdeta
     private final User user;
 
     public LoginUserDetails(User user) {
-        super(user.getUsername(), user.getEncodePassword(), AuthorityUtils.createAuthorityList("ROLE_USER"));   //상속받은 클래스의 생성자를 사용하여 '사용자이름','암호','허가 작업 '을 할수있는 역할을 지정
+        super(user.getUsername(), user.getEncodedPassword(), AuthorityUtils.createAuthorityList("ROLE_USER"));   //상속받은 클래스의 생성자를 사용하여 '사용자이름','암호','허가 작업 '을 할수있는 역할을 지정
         this.user = user;
     }
 

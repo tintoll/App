@@ -24,7 +24,7 @@ public class User {
     private String username;
 
     @JsonIgnore //Rest API로 User 클래스를 JSON형식으로 출력할경우 , 암호필드를 제외하기위해서 사용
-    private String encodePassword;
+    private String encodedPassword;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")    //User와 Customer를 1:N관계로 만들기 위해서 사용

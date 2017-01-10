@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{ //상속하면
         http.formLogin()
                 .loginProcessingUrl("/login")
                 .loginPage("/loginForm")
-                .failureUrl("/loginFomr?error")
+                .failureUrl("/loginForm?error")
                 .defaultSuccessUrl("/customers", true)
                 .usernameParameter("username").passwordParameter("password")
                 .and(); //폼 인증 처리를 유효화 하고 인증처리 경로 로그인 처리경로 로그인 폼 표시경로, 인증에 실패했을때 넘어갈곳 , 인증에 성공했을때 넘어갈곳,사용자 이름과 암호 관련 파라미터 이름을 설정합니다
